@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vietnam 2045 — Capital Research & Investments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Serif+JP:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+/* ════════════════════════════════════════
+   CSS VARIABLES
+   ════════════════════════════════════════ */
+:root {
+  --navy: #1A2744;
+  --navy-deep: #0D1526;
+  --navy-mid: #152036;
+  --navy-light: #243352;
+  --gold: #C5A572;
+  --gold-light: #D4BA8E;
+  --gold-pale: #E8D9BF;
+  --gold-glow: rgba(197,165,114,0.06);
+  --gold-border: rgba(197,165,114,0.18);
+  --cream: #FAFAF6;
+  --cream-warm: #F5F0E8;
+  --text: #1A2744;
+  --text-mid: #3D4A60;
+  --text-light: #8A94A6;
+  --white: #FFFFFF;
+  --content-w: 720px;
+  --wide-w: 1100px;
+  --side-w: 56px;
+  --sp-pad: 24px;
+  --transition: .5s cubic-bezier(.4,0,.2,1);
+}
+
+/* ════════════════════════════════════════
+   RESET & BASE
+   ════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-text-size-adjust:100%}
+body{font-family:'Noto Sans JP',sans-serif;background:var(--cream);color:var(--text);line-height:1.9;font-size:15.5px;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--gold);color:var(--navy-deep)}
+img{display:block;max-width:100%}
+
+/* ════════════════════════════════════════
+   PROGRESS BAR
+   ════════════════════════════════════════ */
+.progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-light));z-index:2000;width:0;transition:width .1s linear;pointer-events:none}
+
+/* ════════════════════════════════════════
+   SIDE NAV (desktop only)
+   ════════════════════════════════════════ */
+.sidenav{position:fixed;left:0;top:0;bottom:0;width:var(--side-w);background:var(--navy-deep);z-index:1500;display:flex;flex-direction:column;align-items:center;padding:20px 0;transition:width .4s var(--transition);overflow:hidden;border-right:1px solid rgba(197,165,114,0.08)}
+.sidenav:hover{width:280px}
+.sidenav-brand{writing-mode:vertical-rl;text-orientation:mixed;font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:11px;letter-spacing:.35em;white-space:nowrap;margin-bottom:auto;padding-top:8px;transition:opacity .3s}
+.sidenav:hover .sidenav-brand{opacity:0;position:absolute}
+.sidenav-content{opacity:0;width:100%;padding:24px 20px;transition:opacity .3s .1s;overflow-y:auto;position:absolute;top:0;bottom:0}
+.sidenav:hover .sidenav-content{opacity:1}
+.sidenav-title{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:12px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--gold-border)}
+.sidenav-part{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:16px 0 4px;opacity:.5}
+.sidenav-link{display:flex;align-items:baseline;gap:8px;padding:4px 0;color:rgba(255,255,255,.55);text-decoration:none;font-size:12.5px;line-height:1.5;transition:color .2s,padding-left .2s;border:none;background:none;cursor:pointer;width:100%;text-align:left}
+.sidenav-link:hover{color:var(--gold);padding-left:4px}
+.sidenav-link.active{color:var(--gold-light)}
+.sidenav-link .num{font-family:'Cormorant Garamond',serif;font-size:10px;color:var(--gold);opacity:.5;min-width:18px}
+
+/* ════════════════════════════════════════
+   MOBILE NAV
+   ════════════════════════════════════════ */
+.mobile-nav-toggle{display:none;position:fixed;bottom:24px;right:24px;z-index:1600;width:48px;height:48px;border-radius:50%;background:var(--navy);border:1px solid var(--gold-border);color:var(--gold);font-size:20px;cursor:pointer;box-shadow:0 4px 20px rgba(13,21,38,0.3);align-items:center;justify-content:center;transition:transform .3s}
+.mobile-nav-toggle:active{transform:scale(.92)}
+.mobile-nav-overlay{display:none;position:fixed;inset:0;background:rgba(13,21,38,0.95);z-index:1550;padding:60px 32px;overflow-y:auto}
+.mobile-nav-overlay.open{display:flex;flex-direction:column;gap:6px}
+.mobile-nav-overlay .mn-close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--gold);font-size:28px;cursor:pointer}
+.mobile-nav-overlay .mn-title{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:12px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:16px}
+.mobile-nav-overlay .mn-part{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin:14px 0 2px;opacity:.5}
+.mobile-nav-overlay a{color:rgba(255,255,255,.7);text-decoration:none;font-size:14px;padding:6px 0;display:block;transition:color .2s}
+.mobile-nav-overlay a:hover,.mobile-nav-overlay a:active{color:var(--gold)}
+
+/* ════════════════════════════════════════
+   LAYOUT
+   ════════════════════════════════════════ */
+.main{margin-left:var(--side-w)}
+.content{max-width:var(--content-w);margin:0 auto;padding:0 48px}
+.wide{max-width:var(--wide-w);margin:0 auto;padding:0 48px}
+.full-bleed{margin-left:calc(var(--side-w) * -1);width:calc(100% + var(--side-w))}
+
+/* ════════════════════════════════════════
+   COVER
+   ════════════════════════════════════════ */
+.cover{min-height:100vh;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--navy-deep)}
+.cover-bg{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,21,38,.72) 0%,rgba(26,39,68,.58) 40%,rgba(13,21,38,.82) 100%),url('https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1920&q=80&fit=crop') center/cover no-repeat}
+.cover-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(var(--gold) 1px,transparent 1px),linear-gradient(90deg,var(--gold) 1px,transparent 1px);background-size:80px 80px}
+.cover-inner{position:relative;z-index:1;text-align:center;padding:60px 32px;max-width:900px}
+.cover-eyebrow{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:13px;letter-spacing:.5em;text-transform:uppercase;opacity:0;animation:fadeUp .7s ease forwards .3s}
+.cover-title{font-family:'Cormorant Garamond',serif;color:var(--white);font-size:clamp(56px,9vw,110px);font-weight:300;letter-spacing:.06em;line-height:.95;margin:20px 0 0;opacity:0;animation:fadeUp .7s ease forwards .5s}
+.cover-year{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:clamp(80px,13vw,170px);font-weight:300;letter-spacing:.2em;line-height:.85;margin:0 0 32px;opacity:0;animation:fadeUp .7s ease forwards .5s}
+.cover-rule{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:0 auto 28px;opacity:0;animation:fadeUp .5s ease forwards .7s}
+.cover-sub{font-family:'Noto Serif JP',serif;color:var(--gold-pale);font-size:clamp(15px,2vw,18px);font-weight:400;line-height:2.1;opacity:0;animation:fadeUp .7s ease forwards .8s}
+.cover-meta{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:12px;letter-spacing:.3em;margin-top:48px;opacity:0;animation:fadeUp .5s ease forwards 1s}
+.cover-scroll{position:absolute;bottom:36px;left:0;right:0;display:flex;flex-direction:column;align-items:center;color:var(--gold);font-size:10px;letter-spacing:.2em;opacity:0;animation:fadeUp .5s ease forwards 1.2s;cursor:pointer}
+.cover-scroll span{padding-left:.2em}
+.cover-scroll::after{content:'';display:block;width:1px;height:36px;background:linear-gradient(to bottom,var(--gold),transparent);margin:6px auto 0;animation:scrollPulse 2.5s ease infinite}
+
+/* ════════════════════════════════════════
+   DATA BAND
+   ════════════════════════════════════════ */
+.data-band{background:var(--navy);padding:48px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:0}
+.data-band-item{flex:1;min-width:160px;max-width:240px;text-align:center;padding:24px 16px;border-right:1px solid rgba(197,165,114,0.12)}
+.data-band-item:last-child{border-right:none}
+.data-band-num{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--gold);line-height:1}
+.data-band-label{font-size:12px;color:var(--gold-pale);opacity:.6;margin-top:6px;letter-spacing:.03em;line-height:1.5}
+
+/* ════════════════════════════════════════
+   PART DIVIDERS
+   ════════════════════════════════════════ */
+.part-divider{min-height:50vh;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;text-align:center;padding:80px 40px;overflow:hidden}
+.part-divider .pd-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.part-divider .pd-overlay{position:absolute;inset:0}
+.part-divider::before,.part-divider::after{content:'';position:absolute;left:60px;right:60px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);z-index:2}
+.part-divider::before{top:36px}
+.part-divider::after{bottom:36px}
+.part-divider .pd-content{position:relative;z-index:2}
+.part-label{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:12px;letter-spacing:.5em;text-transform:uppercase;margin-bottom:12px}
+.part-num{font-family:'Cormorant Garamond',serif;color:rgba(197,165,114,0.35);font-size:clamp(80px,12vw,160px);font-weight:300;line-height:.85;margin-bottom:8px}
+.part-title{font-family:'Noto Serif JP',serif;color:var(--white);font-size:clamp(22px,3.5vw,38px);font-weight:700;line-height:1.4}
+.part-sub{font-family:'Noto Serif JP',serif;color:var(--gold-pale);font-size:15px;font-weight:400;margin-top:8px;opacity:.65}
+
+/* ════════════════════════════════════════
+   SECTION HERO (statement blocks)
+   ════════════════════════════════════════ */
+.section-hero{background:var(--navy);padding:64px 40px;text-align:center;position:relative;overflow:hidden}
+.section-hero .sh-num{font-family:'Cormorant Garamond',serif;font-size:clamp(64px,10vw,140px);font-weight:300;color:var(--gold);line-height:.85;opacity:.4}
+.section-hero .sh-label{font-family:'Cormorant Garamond',serif;font-size:12px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold);margin:8px 0 16px}
+.section-hero .sh-text{font-family:'Noto Serif JP',serif;font-size:clamp(18px,2.8vw,30px);font-weight:700;color:var(--white);line-height:1.6;max-width:700px;margin:0 auto}
+.section-hero .sh-sub{font-size:14px;color:var(--gold-pale);opacity:.6;margin-top:16px;max-width:600px;margin-left:auto;margin-right:auto}
+.section-hero .sh-rule{width:60px;height:2px;background:var(--gold);margin:20px auto}
+
+/* ════════════════════════════════════════
+   MAGAZINE LAYOUT (2-col with photo)
+   ════════════════════════════════════════ */
+.magazine{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch;min-height:360px}
+.magazine.reverse .mag-photo{order:-1}
+.mag-text{padding:56px 48px;display:flex;flex-direction:column;justify-content:center;background:var(--cream)}
+.mag-photo{position:relative;overflow:hidden;background:var(--navy);min-height:300px}
+.mag-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.mag-photo:hover img{transform:scale(1.03)}
+.mag-photo .fallback{position:absolute;inset:0;background:linear-gradient(135deg,var(--navy),var(--navy-light));display:flex;align-items:center;justify-content:center}
+.mag-photo .fallback::after{content:'';display:block;width:80px;height:80px;border:2px solid var(--gold-border);border-radius:50%;opacity:.3}
+.mag-num{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:40px;font-weight:300;line-height:1;opacity:.4}
+.mag-title{font-family:'Noto Serif JP',serif;font-size:clamp(18px,2.5vw,22px);font-weight:700;color:var(--navy);line-height:1.5;margin:4px 0 16px}
+
+/* ════════════════════════════════════════
+   SECTIONS (standard text)
+   ════════════════════════════════════════ */
+.section{padding:64px 0 48px;border-bottom:1px solid var(--gold-border)}
+.section:last-child{border-bottom:none}
+.section-header{margin-bottom:32px}
+.section-number{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:52px;font-weight:300;line-height:1;opacity:.5}
+.section-title{font-family:'Noto Serif JP',serif;font-size:clamp(20px,3vw,24px);font-weight:700;color:var(--navy);line-height:1.5;margin-top:2px}
+.section-subtitle{font-family:'Noto Serif JP',serif;font-size:16px;font-weight:600;color:var(--navy);line-height:1.5;margin:40px 0 14px;padding-left:14px;border-left:3px solid var(--gold)}
+p{margin-bottom:1.2em;text-align:justify}
+p:last-child{margin-bottom:0}
+
+/* ════════════════════════════════════════
+   KEY INSIGHT BOX
+   ════════════════════════════════════════ */
+.insight{background:var(--white);border:1px solid var(--gold-border);border-radius:4px;padding:20px 24px;margin:20px 0;transition:transform .3s,box-shadow .3s}
+.insight:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(26,39,68,0.06)}
+.insight-label{font-weight:600;color:var(--gold);font-size:12px;letter-spacing:.05em;margin-bottom:4px}
+
+/* ════════════════════════════════════════
+   TABLES
+   ════════════════════════════════════════ */
+.table-wrap{margin:24px 0;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--gold-border);border-radius:4px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;white-space:nowrap}
+thead th{background:var(--navy);color:var(--gold-pale);font-weight:500;padding:9px 12px;text-align:left;font-size:12.5px;letter-spacing:.02em;white-space:nowrap}
+tbody td{padding:9px 12px;border-bottom:1px solid var(--gold-border);vertical-align:top;white-space:nowrap}
+tbody tr:nth-child(even){background:var(--gold-glow)}
+.table-note{font-size:11.5px;color:var(--text-light);margin-top:6px;line-height:1.6}
+
+/* ════════════════════════════════════════
+   HIGHLIGHT BOX
+   ════════════════════════════════════════ */
+.hl-box{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-light) 100%);color:var(--cream);padding:24px 28px;border-radius:4px;margin:28px 0;border-left:4px solid var(--gold);position:relative;overflow:hidden}
+.hl-box p{color:var(--cream);text-align:left;position:relative}
+.hl-label{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:10px;letter-spacing:.3em;text-transform:uppercase;margin-bottom:8px;position:relative}
+
+/* ════════════════════════════════════════
+   NOTE
+   ════════════════════════════════════════ */
+.note{font-size:13px;color:var(--text-light);padding:10px 14px;background:var(--cream-warm);border-radius:3px;margin:14px 0;line-height:1.7}
+
+/* ════════════════════════════════════════
+   FOOTER
+   ════════════════════════════════════════ */
+.footer{background:var(--navy-deep);text-align:center;padding:60px 32px}
+.footer-brand{font-family:'Cormorant Garamond',serif;color:var(--gold);font-size:18px;letter-spacing:.15em;margin-bottom:6px}
+.footer-year{color:var(--gold-pale);font-size:12px;letter-spacing:.2em;opacity:.5}
+.footer-disc{max-width:560px;margin:20px auto 0;font-size:10.5px;color:var(--gold-pale);opacity:.35;line-height:1.8}
+
+/* ════════════════════════════════════════
+   ANIMATIONS (minimal & elegant)
+   ════════════════════════════════════════ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scrollPulse{0%,100%{opacity:.3}50%{opacity:1}}
+/* Reveal: visible by default. JS adds .reveal-ready to <html> when observer works. */
+.reveal-ready .reveal{opacity:0;transform:translateY(24px);transition:opacity .6s var(--transition),transform .6s var(--transition)}
+.reveal-ready .reveal.vis{opacity:1;transform:translateY(0)}
+.reveal-ready .reveal-d1{transition-delay:.08s}
+.reveal-ready .reveal-d2{transition-delay:.16s}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — TABLET (≤1024px)
+   ════════════════════════════════════════ */
+@media(max-width:1024px){
+  .sidenav{display:none}
+  .main{margin-left:0}
+  .full-bleed{margin-left:0;width:100%}
+  .mobile-nav-toggle{display:flex}
+  .content{padding:0 32px}
+  .wide{padding:0 32px}
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — PHONE (≤768px)
+   ════════════════════════════════════════ */
+@media(max-width:768px){
+  body{font-size:15px;line-height:1.85}
+  .cover{min-height:90vh}
+  .cover-inner{padding:40px 24px}
+  .cover-year{letter-spacing:.1em}
+  .data-band{padding:32px 16px;flex-direction:column;align-items:center}
+  .data-band-item{border-right:none;border-bottom:1px solid rgba(197,165,114,0.1);padding:18px 16px;max-width:100%;width:100%}
+  .data-band-item:last-child{border-bottom:none}
+  .magazine{grid-template-columns:1fr}
+  .magazine.reverse .mag-photo{order:0}
+  .mag-photo{min-height:220px;aspect-ratio:16/9}
+  .mag-text{padding:36px 28px}
+  .part-divider{min-height:40vh;padding:60px 28px}
+  .part-divider::before,.part-divider::after{left:24px;right:24px}
+  .section-hero{padding:48px 28px}
+  .section{padding:48px 0 36px}
+  .content{padding:0 var(--sp-pad)}
+  .wide{padding:0 var(--sp-pad)}
+  .footer{padding:48px 24px}
+  .section-subtitle{margin:32px 0 12px}
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — SMALL PHONE (≤480px)
+   ════════════════════════════════════════ */
+@media(max-width:768px){
+  .chart-block{padding:16px 14px 12px}
+  .chart-guard{padding:8px 10px}
+  .chart-guard li{font-size:11px}
+}
+@media(max-width:480px){
+  body{font-size:14.5px;line-height:1.8}
+  .cover{min-height:85vh}
+  .cover-inner{padding:32px 20px}
+  .cover-sub{font-size:14px}
+  .data-band{padding:24px 12px}
+  .data-band-item{padding:14px 12px}
+  .data-band-num{font-size:clamp(28px,8vw,36px)}
+  .magazine{min-height:auto}
+  .mag-photo{min-height:180px}
+  .mag-text{padding:28px 20px}
+  .mag-title{font-size:18px}
+  .part-divider{min-height:35vh;padding:48px 20px}
+  .section-hero{padding:36px 20px}
+  .section-hero .sh-text{font-size:clamp(16px,4.5vw,22px)}
+  .section{padding:36px 0 28px}
+  .section-number{font-size:40px}
+  .section-title{font-size:19px}
+  .section-subtitle{font-size:15px}
+  .content{padding:0 18px}
+  .wide{padding:0 18px}
+  table{font-size:13px;min-width:500px}
+  thead th{padding:7px 10px;font-size:12px}
+  tbody td{padding:7px 10px}
+  .insight{padding:16px 18px}
+  .hl-box{padding:18px 20px}
+  .mobile-nav-toggle{bottom:16px;right:16px;width:44px;height:44px}
+}
+
+/* ════════════════════════════════════════
+   CHART BLOCKS
+   ════════════════════════════════════════ */
+.chart-block{margin:28px 0;background:var(--white);border:1px solid var(--gold-border);border-radius:4px;padding:22px 24px 16px}
+.chart-block-dark{margin:28px 0;background:var(--navy);border:1px solid rgba(197,165,114,0.2);border-radius:4px;padding:22px 24px 16px}
+.chart-caption{font-size:11.5px;color:var(--text-light);margin-top:10px;line-height:1.6}
+.chart-guard{margin-top:12px;padding:10px 14px;background:var(--cream-warm);border-left:3px solid var(--gold-border);border-radius:0 3px 3px 0}
+.chart-guard-title{font-size:10.5px;font-weight:600;color:var(--gold);letter-spacing:.04em;margin-bottom:5px;text-transform:uppercase}
+.chart-guard ul{margin:0;padding-left:1.1em;list-style:disc}
+.chart-guard li{font-size:11.5px;color:var(--text-mid);line-height:1.75;margin-bottom:1px}
+.chart-guard li strong{font-weight:600;color:var(--text)}
+.chart-legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:12px;font-size:12px;color:var(--text-mid)}
+.chart-legend span{display:flex;align-items:center;gap:5px}
+.chart-legend .dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — VERY SMALL (≤390px)
+   ════════════════════════════════════════ */
+@media(max-width:390px){
+  .cover-title{font-size:48px}
+  .cover-year{font-size:72px;letter-spacing:.05em}
+  .cover-sub{font-size:13.5px}
+  .content{padding:0 16px}
+  .mag-text{padding:24px 16px}
+  .part-divider{padding:40px 16px}
+  .section-hero{padding:32px 16px}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="prog"></div>
+
+<!-- ════ SIDE NAV (desktop) ════ -->
+<nav class="sidenav" id="sidenav">
+  <div class="sidenav-brand">CRI — VIETNAM 2045</div>
+  <div class="sidenav-content">
+    <div class="sidenav-title">Contents</div>
+    <a href="#intro" class="sidenav-link" data-nav><span class="num"></span>はじめに</a>
+    <div class="sidenav-part">Part I — 国のストーリー</div>
+    <a href="#s01" class="sidenav-link" data-nav><span class="num">01</span>20年周期で読む構造進化</a>
+    <a href="#s02" class="sidenav-link" data-nav><span class="num">02</span>一人当たりGDP比較</a>
+    <a href="#s03" class="sidenav-link" data-nav><span class="num">03</span>5,000ドル×40,000ドル</a>
+    <a href="#s04" class="sidenav-link" data-nav><span class="num">04</span>実体経済→企業業績</a>
+    <a href="#s05" class="sidenav-link" data-nav><span class="num">05</span>北東アジア型モデル</a>
+    <a href="#s06" class="sidenav-link" data-nav><span class="num">06</span>4つの構造的強み</a>
+    <a href="#s07" class="sidenav-link" data-nav><span class="num">07</span>日本とベトナム</a>
+    <div class="sidenav-part">Part II — 投資判断の材料</div>
+    <a href="#s08" class="sidenav-link" data-nav><span class="num">08</span>実効投資可能市場</a>
+    <a href="#s09" class="sidenav-link" data-nav><span class="num">09</span>制度面の改善余地</a>
+    <a href="#s10" class="sidenav-link" data-nav><span class="num">10</span>制約解放のリターン</a>
+    <a href="#s11" class="sidenav-link" data-nav><span class="num">11</span>なぜ今なのか</a>
+    <a href="#s12" class="sidenav-link" data-nav><span class="num">12</span>セクター分析</a>
+    <div class="sidenav-part">Part III — リスク</div>
+    <a href="#s13" class="sidenav-link" data-nav><span class="num">13</span>リスクの深掘り</a>
+    <a href="#s14" class="sidenav-link" data-nav><span class="num">14</span>2045年シナリオ</a>
+    <a href="#outro" class="sidenav-link" data-nav><span class="num"></span>おわりに</a>
+  </div>
+</nav>
+
+<!-- ════ MOBILE NAV ════ -->
+<button class="mobile-nav-toggle" id="mnToggle" aria-label="目次">☰</button>
+<div class="mobile-nav-overlay" id="mnOverlay">
+  <button class="mn-close" id="mnClose">×</button>
+  <div class="mn-title">Contents</div>
+  <a href="#intro" class="mn-link">はじめに</a>
+  <div class="mn-part">Part I — 国のストーリー</div>
+  <a href="#s01" class="mn-link">01 — 20年周期で読む構造進化</a>
+  <a href="#s02" class="mn-link">02 — 一人当たりGDP比較</a>
+  <a href="#s03" class="mn-link">03 — 5,000ドル×40,000ドル</a>
+  <a href="#s04" class="mn-link">04 — 実体経済→企業業績</a>
+  <a href="#s05" class="mn-link">05 — 北東アジア型モデル</a>
+  <a href="#s06" class="mn-link">06 — 4つの構造的強み</a>
+  <a href="#s07" class="mn-link">07 — 日本とベトナム</a>
+  <div class="mn-part">Part II — 投資判断の材料</div>
+  <a href="#s08" class="mn-link">08 — 実効投資可能市場</a>
+  <a href="#s09" class="mn-link">09 — 制度面の改善余地</a>
+  <a href="#s10" class="mn-link">10 — 制約解放のリターン</a>
+  <a href="#s11" class="mn-link">11 — なぜ今なのか</a>
+  <a href="#s12" class="mn-link">12 — セクター分析</a>
+  <div class="mn-part">Part III — リスク</div>
+  <a href="#s13" class="mn-link">13 — リスクの深掘り</a>
+  <a href="#s14" class="mn-link">14 — 2045年シナリオ</a>
+  <a href="#outro" class="mn-link">おわりに</a>
+</div>
+
+<!-- ════════════════════════════════════════
+     COVER — HCMC Skyline (Verified: Tron Le)
+     ════════════════════════════════════════ -->
+<header class="cover" id="top">
+  <div class="cover-bg"></div>
+  <div class="cover-grid"></div>
+  <div class="cover-inner">
+    <div class="cover-eyebrow">Capital Research & Investments</div>
+    <div class="cover-title">Vietnam</div>
+    <div class="cover-year">2045</div>
+    <div class="cover-rule"></div>
+    <div class="cover-sub">ドイモイ40年の成果と次の20年<br>市場経済化、産業高度化、そして高所得化へ</div>
+    <div class="cover-meta">2026 &nbsp;|&nbsp; Confidential</div>
+  </div>
+  <div class="cover-scroll" onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth'})"><span>SCROLL</span></div>
+</header>
+
+<!-- ════════════════════════════════════════
+     MAIN CONTENT
+     ════════════════════════════════════════ -->
+<div class="main">
+
+<!-- ══ DATA BAND ══ -->
+<div class="data-band full-bleed reveal">
+  <div class="data-band-item"><div class="data-band-num">$4,717</div><div class="data-band-label">一人当たりGDP（2024）</div></div>
+  <div class="data-band-item"><div class="data-band-num">$24,200</div><div class="data-band-label">ベースケース 2045年</div></div>
+  <div class="data-band-item"><div class="data-band-num">5.1×</div><div class="data-band-label">20年間の成長倍率</div></div>
+  <div class="data-band-item"><div class="data-band-num">2026/9</div><div class="data-band-label">FTSE EM 組入れ</div></div>
+</div>
+
+<!-- ══ はじめに ══ -->
+<div class="content">
+<section class="section" id="intro">
+  <div class="section-header reveal"><div class="section-title">はじめに</div></div>
+  <div class="reveal reveal-d1">
+    <p>我々は2005年以来、ベトナムに注目してきました。当時のベトナムの一人当たりGDPは約700ドル。それから20年を経て、ベトナムの一人当たりGDPは4,717ドル（2024年、World Bank）に達しています。日本が1975年に記録した4,776ドルとほぼ同じ水準であり、約50年の時を隔てて、ベトナムは同じ「5,000ドルの通過点」に到達しました。</p>
+    <div class="note">※2025年のベトナムの1人当たりGDPは5,026ドルと推定されます。（出所：JETRO）</div>
+    <p>本レポートの主張は、以下の3点です。</p>
+  </div>
+  <div class="reveal reveal-d2">
+    <div class="insight"><div class="insight-label">第一の主張</div><p>ベトナムは5,000ドルの通過点から、次の20年の成長余地が大きい。当社の推計では、2045年のベトナムの一人当たりGDPは、ベアケースでも現在の約3倍となる13,000ドルに達します。ベースケースでは24,200ドル（5.1倍）、ブルケースでは32,000ドル（6.4倍）を想定しています。これらはいずれも成長率の逓減を織り込んだ試算であり、単純な直線外挿に基づく楽観シナリオではありません。</p></div>
+    <div class="insight"><div class="insight-label">第二の主張</div><p>ベトナム株式市場には制約があるが、その制約解放そのものが投資機会である。ベトナム株式市場の時価総額3,520億ドル（資料作成時点）という表面的な規模に対し、各種制約要因を差し引いた後の実効的な投資可能市場は、外国人機関投資家にとって600億～900億ドル程度にとどまります。一方で、FTSE EM昇格（2025年9月公表、2026年9月実施予定）を起点に、MSCIエマージング市場への格上げを目指す制度改善の進展は、パッシブ資金の流入と投資可能市場の拡大を通じて、累積的なリターン効果を生み出す可能性があります。</p></div>
+    <div class="insight"><div class="insight-label">第三の主張</div><p>最初の5年に制度・指数・インフラのカタリストが集中している。FTSEエマージング指数への組入れ、ロンタイン空港の開業、国有企業（SOE）の株式化、MSCIエマージング指数への昇格プロセスの始動。長期的な構造成長テーマと短中期のカタリストが重なるこのタイミングこそ、ベトナム株式への投資を検討する合理的な局面です。</p></div>
+  </div>
+  <div class="reveal">
+    <p>一方で、上場市場は銀行・不動産セクターへの偏重が大きいため、実際の投資にあたっては厳格な銘柄選別が不可欠です。</p>
+  </div>
+</section>
+</div>
+
+<!-- ══ PART I — Rice Terraces (Verified Vietnam) ══ -->
+<div class="part-divider full-bleed reveal">
+  <div class="pd-bg" style="background:url('https://images.unsplash.com/photo-1528127269322-539801943592?w=1920&q=80&fit=crop') center/cover no-repeat"></div>
+  <div class="pd-overlay" style="background:linear-gradient(170deg,rgba(13,21,38,.78) 0%,rgba(26,39,68,.62) 50%,rgba(13,21,38,.82) 100%)"></div>
+  <div class="pd-content">
+    <div class="part-label">Part I</div>
+    <div class="part-num">I</div>
+    <div class="part-title">VIET NAM 2045</div>
+    <div class="part-sub">ベトナムの長期ストーリー</div>
+  </div>
+</div>
+
+<!-- ══ 01 ══ -->
+<div class="content">
+<section class="section" id="s01">
+  <div class="section-header reveal"><div class="section-number">01</div><div class="section-title">20年周期で読む構造進化</div></div>
+  <div class="reveal"><p>ドイモイ政策（ドイモイ：ベトナム語で「刷新」）とは、1986年に始まった計画経済から市場経済への転換を軸とする経済改革です。そして1986年の採択から2045年までの約60年は、3つの20年周期で整理できます。</p></div>
+  <div class="reveal"><div class="section-subtitle">第1期：市場経済化（1986〜2005）</div><p>体制転換と貧困脱却が進んだ時代です。1975年の南北統一後、ベトナムは約10年にわたり計画経済の下で経済停滞に苦しみました。1986年の共産党大会で採択されたドイモイ政策は、価格自由化・土地使用権の開放・民間企業の合法化といった一連の構造改革を含んでいました。1995年のASEAN加盟と米越関係の正常化を契機に、ベトナム経済は成長軌道に入り、一人当たりGDPは約100ドルから約700ドルへ上昇しました。貧困率も大幅に低下し、経済改革の成果が着実に表れ、この20年間は、国内の制度基盤を整える「助走」の時代となりました。</p></div>
+  <div class="reveal"><div class="section-subtitle">第2期：産業高度化（2006〜2025）</div><p>量的成長が本格化した段階です。2007年のWTO加盟を契機に、Samsungをはじめとする大規模な外資の進出が加速し、一人当たりGDPは約700ドルから約4,700ドルへ、約6.7倍に拡大しました。この時期の特徴は、外資製造業が経済成長のエンジンとなったことです。Samsungは2008年の工場立ち上げ以降、累計232億ドルを投じ、ベトナム輸出の約20％を担う最大の外資企業へと成長しました。2025年9月にはFTSE Russellがエマージング市場への再分類を公表しています。</p></div>
+  <div class="reveal"><div class="section-subtitle">第3期：高所得国化（2026〜2045）</div><p>「仕上げの20年」です。当社は、2045年のベトナムの一人当たりGDPがベースケースで24,000ドル超、ブルケースで32,000ドルに達する可能性を見込んでおり、一人当たりGNIベースでも世界銀行の高所得国基準が視野に入ると考えています。中間層の拡大、金融深化、都市化の加速が企業利益の成長を駆動する構造に入ります。</p></div>
+</section>
+</div>
+
+<!-- ══ STATEMENT: $4,717 ══ -->
+<div class="section-hero full-bleed reveal">
+  <div class="sh-num">$4,717</div>
+  <div class="sh-label">Section 02</div>
+  <div class="sh-text">日本1975年とベトナム2025年<br>同じ「5,000ドルの通過点」</div>
+  <div class="sh-rule"></div>
+  <div class="sh-sub">約50年の時差を隔てて、両国は同じ転換点に立っている</div>
+</div>
+
+<!-- ══ 02 ══ -->
+<div class="content">
+<section class="section" id="s02">
+  <div class="section-header reveal"><div class="section-number">02</div><div class="section-title">一人当たりGDP — 日本1975年とベトナム2025年</div></div>
+  <div class="reveal"><p>日本は1975年に一人当たりGDP 4,776ドルに達しました。ベトナムは2024年に4,717ドルとなっており、約50年の時差はあるものの、両国は同じ「5,000ドルの通過点」に立っていると捉えることができます。この水準は、国民の可処分所得が必需品を超えて「選択的消費」に向かい始める転換点として、重要な意味を持ちます。</p><p>日本はその後20年を経た1995年に44,198ドルに到達し、約9.3倍の拡大となりました。ただし、この伸びには1985年のプラザ合意後の急激な円高によるドル換算値の押し上げも含まれています。実質的な経済成長に加えて、為替効果がドル建ての数字を大きく押し上げた点は、比較の際に意識しておく必要があります。</p></div>
+  <div class="reveal"><div class="table-wrap"><table><thead><tr><th>年数</th><th>日本</th><th>暦年</th><th>ベトナム</th><th>暦年</th></tr></thead><tbody><tr><td>0年</td><td>$4,776</td><td>1975</td><td>$4,745</td><td>2025</td></tr><tr><td>5年</td><td>$9,669</td><td>1980</td><td>$7,643</td><td>2030</td></tr><tr><td>10年</td><td>$11,809</td><td>1985</td><td>$11,760</td><td>2035</td></tr><tr><td>15年</td><td>$25,801</td><td>1990</td><td>$17,279</td><td>2040</td></tr><tr><td>20年</td><td>$44,198</td><td>1995</td><td>$24,236</td><td>2045</td></tr></tbody></table></div><div class="table-note">出所：日本 — World Bank/FRED実績／ベトナム — 2024年World Bank実績、2026-2045ベースケース推計</div></div>
+  <div class="reveal">
+    <div class="chart-block">
+      <div class="chart-legend">
+        <span><span class="dot" style="background:#C5A572"></span>日本 実績（1975–1995）</span>
+        <span><span class="dot" style="background:#1A2744"></span>ベトナム ベースケース</span>
+        <span><span class="dot" style="background:#8A94A6;opacity:.7"></span>ベトナム ベアケース</span>
+        <span><span class="dot" style="background:#D4BA8E;border:1px dashed #C5A572"></span>ベトナム ブルケース</span>
+      </div>
+      <div style="position:relative;width:100%;height:260px">
+        <canvas id="chart-gdp"></canvas>
+      </div>
+      <div class="chart-caption">一人当たりGDP（USD）。起点を0年として20年間の軌跡を重ね合わせ。日本の起点は1975年、ベトナムの起点は2025年。出所：World Bank、当社推計。</div>
+      <div class="chart-guard">
+        <div class="chart-guard-title">前提・方法論</div>
+        <ul>
+          <li><strong>ベースケース：</strong>5年CAGRが10%→9%→8%→7%と段階的に逓減。実質成長率（約6-7%）＋インフレ率（約3%）の名目値合算。</li>
+          <li><strong>ベアケース：</strong>5年CAGRが7%→6%→5%→5%。米中摩擦深化・FDI鈍化・構造改革の遅延シナリオ。</li>
+          <li><strong>ブルケース：</strong>5年CAGRが12%→10%→9%→8%。MSCI EM昇格の早期実現・SOE株式化加速・中間層消費の急拡大を想定。</li>
+          <li><strong>共通前提：</strong>ドル建て名目GDP/人（PPPベースではない）。1985年プラザ合意後の円高による日本のドル建て押し上げ効果は未織込み。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="reveal"><p>ベトナムのベースケースは、日本の9.3倍に対し5.1倍にとどまる設計であり、保守的な見通しです。成長率は、年平均成長率（CAGR）が5年ごとに10％、9％、8％、7％へと段階的に低下する前提で設計しています。プラザ合意的な為替効果は織り込んでいません。それでもなお一人当たりGDPが24,000ドルに達するという点に、5,000ドルの通過点から生まれる複利成長の力があります。</p><p>もっとも、ベトナムでは生産年齢人口がなお厚みを保つと見込まれており、統計上の定義によっては2038年頃まで増加が続くとされています。日本が1990年代に生産年齢人口のピークを迎えたのと比較すると、ベトナムにはまだ10年以上の人口ボーナス期間が残されています。</p></div>
+</section>
+
+<!-- ══ 03 ══ -->
+<section class="section" id="s03">
+  <div class="section-header reveal"><div class="section-number">03</div><div class="section-title">5,000ドルの国に40,000ドルの技術</div></div>
+  <div class="reveal"><p>一人当たりGDPは日本の1975年と同水準ですが、産業の中身は大きく異なります。1975年の日本は重工業・自動車・エレクトロニクスの国内産業基盤を自力で構築していました。一方、現在のベトナムはSamsungが巨額を投じ、輸出の約20％を担う同国最大の外資企業として製造業集積の中核を担っています。Appleのサプライチェーンも拡張を続けており、半導体後工程ではAmkorの16億ドル、Hana Micronの9.3億ドルといった大型投資が進んでいます。</p><p>この構造の意味するところは、ベトナムが「5,000ドルの所得水準」と「40,000ドル経済圏の技術・品質管理」を同時に持っているということです。1975年の日本にこうした「リープフロッグ」の余地はありませんでした。ベトナムは、グローバル・サプライチェーンに組み込まれることで、自国の所得水準をはるかに超える付加価値の製造・輸出を実現しています。</p><div class="note">※「リープフロッグ」とは、発展途上国が先進国の辿った中間段階を飛び越え、最新の技術やインフラを直接導入する現象を指します。</div></div>
+  <div class="reveal"><div class="section-subtitle">技術移転から内需への波及メカニズム</div><p>外資製造業の利益は本国へ還流しますが、その過程で生まれる雇用・賃金・サプライチェーンの国内化・技術移転が、内需拡大の起点となります。具体的には、① 外資工場が雇用と賃金所得を生み出し、② 部品・サービスの現地調達が国内サプライヤーを育成し、③ 技術・品質管理の移転が国内企業の競争力を引き上げ、④ 所得上昇が内需（消費・金融・不動産）を拡大するという連鎖です。</p><p>この波及メカニズムは、単なる理論ではなく、すでに実証されつつあります。北部ハノイ首都圏近郊のバクニン省やタイグエン省など、Samsungの工場が立地する地域では、周辺のサービス業・小売業・不動産市場が目に見えて活性化しています。</p><p>この「外資→雇用→所得→内需」の波及経路が、ベトナム株式市場で捕捉可能なリターンの源泉です。以降、本レポートではこの構造を「波及メカニズム」と呼びます。</p></div>
+</section>
+
+<!-- ══ 04 ══ -->
+<section class="section" id="s04">
+  <div class="section-header reveal"><div class="section-number">04</div><div class="section-title">実体経済から企業業績への接続</div></div>
+  <div class="reveal"><p>新興国投資において最も重要な問いは、「GDP成長が企業利益へと変換される構造が存在するか」という点です。GDPが成長しても、企業利益に繋がらなければ株式投資のリターンにはなりません。多くの新興国では、経済成長が非上場部門や外資企業に吸収され、上場市場の投資家はその果実を十分に受け取れないという問題があります。GDP成長率が高くても株式市場のリターンが低迷してきた国は少なくありません。問われているのは「この国は成長するか」ではなく、「その成長を上場株式市場で捕捉できるか」です。</p></div>
+  <div class="reveal"><p>ベトナムでは、この接続構造がいくつかのデータで確認できます。まず、家計所得の増加と中間層の拡大です。BCGの調査によれば、ABCD層（中間層以上）は世帯の56%に達しており、月間所得も前年比+9.1%で増加しています。3,600万人を超える中間層は、消費・金融・不動産にまたがる内需の厚みを形成しています。</p><p>次に、信用供給の回復です。銀行与信は2025年末時点で前年比約18%増加しました。現在ベトナムでは企業活動に必要な資金循環が加速しつつあります。そして、これらの結果として、上場企業全体の利益成長率は2024年に22.3%となりました。企業業績が実体経済の成長を「増幅」する構造にあることを示唆しています。</p></div>
+  <div class="reveal"><p>なぜこの増幅が起きるのか。ひとつの要因は、ベトナムの上場市場が内需セクターに偏重しているという構造そのものにあります。前述のとおり、外資製造業の利益は本国に還流しますが、その過程で生まれた雇用と所得は国内の銀行・不動産・消費セクターに流れ込みます。上場市場の約65%を占める銀行・不動産セクターは、まさにこの波及経路の受け皿です。つまり、「外資が稼ぎ、内需が利益を上場市場に変換する」という構造的メカニズムの結果です。</p><p>もう一つの要因は、金融深化の初期段階にあることです。ベトナムの家計金融資産は依然として預金に偏重しており、株式・投資信託への配分は低水準にとどまっています。信用/GDP比率も先進国と比べて発展途上にあります。これは裏を返せば、銀行の与信拡大余地が大きいことを意味し、与信成長が企業利益成長をブーストする構造が当面続く可能性を示唆しています。</p><div class="table-note">出所：ABCD層比率 — BCG/Vietnam Investment Review（2024）。与信成長 — SBV統計。2024年利益成長 — FiinPro集計。</div></div>
+</section>
+
+<!-- ══ 05 ══ -->
+<section class="section" id="s05">
+  <div class="section-header reveal"><div class="section-number">05</div><div class="section-title">北東アジア型の段階的進化モデル</div></div>
+  <div class="reveal"><p>ベトナムは、制度改革を出発点に製造業で付加価値を蓄積し、その後に内需拡大へとつなげていく、北東アジア型の段階的発展モデルに沿って進んでいます。</p><div class="table-wrap"><table><thead><tr><th>国/地域</th><th>制度改革</th><th>製造業</th><th>内需転換</th><th>GDP/人</th></tr></thead><tbody><tr><td>日本</td><td>1945–52</td><td>1955–73</td><td>1960s後半</td><td>$34,720</td></tr><tr><td>韓国</td><td>1961</td><td>1965–97</td><td>1990s後半</td><td>$35,960</td></tr><tr><td>台湾</td><td>1960s</td><td>1965–2000</td><td>2000s初頭</td><td>$37,827</td></tr><tr><td>中国</td><td>1978</td><td>1990–2015</td><td>2015年以降</td><td>$12,500</td></tr><tr><td style="color:var(--gold);font-weight:600">ベトナム</td><td>1986</td><td>2007–現在</td><td>2025年〜</td><td>$4,717</td></tr></tbody></table></div><div class="table-note">出所：World Bank、各種公開資料。一人当たりGDPは直近値（World Bank 2023–2024年）。</div></div>
+
+  <div class="reveal">
+    <div class="chart-block">
+      <div class="chart-legend">
+        <span><span class="dot" style="background:#C5A572"></span>現在の一人当たりGDP（USD）</span>
+        <span><span class="dot" style="background:#C5A572;opacity:.35;border:1px solid #C5A572"></span>ベトナム（現在地）</span>
+      </div>
+      <div style="position:relative;width:100%;height:200px">
+        <canvas id="chart-asia"></canvas>
+      </div>
+      <div class="chart-caption">一人当たりGDP直近値（USD）。出所：World Bank 2023–2024年。ベトナムは北東アジア型発展モデルの最末端に位置する。</div>
+    </div>
+  </div>
+  <div class="reveal"><p>この表が示すのは、東アジアの経済発展には共通の「文脈」があるということです。制度整備→輸出製造業→内需拡大という順序を、日本・韓国・台湾・中国のいずれもたどっており、ベトナムも例外ではありません。</p><p>注目すべきは2点です。第一に、後発国ほど実装が速いこと。日本は制度改革から内需転換まで20年以上を要しましたが、ベトナムはSamsung進出からわずか15年余りで$5,000の通過点に達しています。グローバル・サプライチェーンの深化やFTAの多層化が、この加速を支えています。</p><p>第二に、「製造業主導→内需転換」のラグこそが投資上の最重要局面であること。韓国の1990年代後半、中国の2015年以降と同様に、製造業が生み出した所得が銀行与信・消費・不動産を同時に押し上げるフェーズは、株式市場の構造的拡大を伴います。ABCD層が世帯の56%に達した現在のベトナムは、まさにこの転換期の入口にあります。</p><p>ただし、先行国が製造業期にトヨタやSamsung、TSMCといった国内グローバル企業を育てたのに対し、ベトナムの製造業集積は依然として外資主導です。この差異が内需転換後の「第二段階の成長」にどう影響するかは、長期投資における重要な論点として意識しておく必要があります。</p></div>
+</section>
+
+<!-- ══ 06 ══ -->
+<section class="section" id="s06">
+  <div class="section-header reveal"><div class="section-number">06</div><div class="section-title">4つの構造的強み</div></div>
+  <div class="reveal"><div class="section-subtitle">6-1. 人とコスト</div><p>ベトナムの労働力が持つ強みは、「安い」か「優秀か」の二者択一ではなく、その両方を同時に備えている点にあります。</p><p>ベトナムのOECD学習到達度調査（PISA）2022の数学スコアは469点で、OECD平均（472点）とほぼ同水準です。一人当たりGDPが5,000ドル以下の国がこの水準に達している例はほとんどありません。中所得国でありながら先進国に近い教育成果を示しているという事実は、ベトナムが今後、労働集約型産業からより付加価値の高い産業へ移行するための人的資本の土台がすでに整っていることを意味します。SamsungやAmkorの半導体後工程がベトナムに集積しつつある背景には、賃金コストだけでなく、この教育水準が支える労働者の品質管理能力や技術習得速度があります。</p><p>人口構造も追い風です。労働年齢人口は2038年頃に約6,950万人でピークを迎える見通しであり、当面は労働供給の厚みが保たれます。女性の労働参加率もWorld Bankの2024年データで69.1%と、アジアの中でも際立って高い水準です。これは単に労働力の「量」の問題ではなく、世帯あたりの稼得者が多いことで消費力の底上げに直結する点が重要です。共働き世帯の増加は、住宅需要・金融サービス需要・消費支出の拡大を同時に駆動します。</p><p>もっとも、この強みは永続的ではありません。賃金上昇は年率7〜10%のペースで進んでおり、カンボジアやバングラデシュとの単純コスト比較では優位性が縮小しつつあります。しかし、PISAスコアに象徴される教育水準と組み合わせれば、ベトナムは「コスト競争から抜け出す前に、すでに次のステージの条件を満たしている」という稀有なポジションにあります。これは投資家にとって、成長が賃金上昇で相殺されるリスクが、他のフロンティア市場と比べて構造的に低いことを意味します。</p></div>
+  <div class="reveal"><div class="section-subtitle">6-2. 立地と外交</div><p>ベトナムの地政学的ポジションは、「China+1」の受け皿として語られることが多いですが、より本質的な強みはその外交構造そのものにあります。</p><p>2026年1月のEUとの関係格上げにより、ベトナムの包括的戦略パートナーは15か国・機関となりました。米国、中国、日本、韓国、インド、ロシア、そしてEUという、相互に対立を含む主要プレイヤーのすべてと最高位の外交関係を持つ国は、世界でもベトナムを含むごく少数に限られます。「竹外交」と呼ばれるこの姿勢は、風がどちらから吹いても折れずにしなるという比喩のとおり、特定の大国に依存しない柔軟なポジショニングを特徴としています。</p><p>この外交構造は、通商面では多層的なFTA網として実装されています。CPTPP、RCEP、EVFTA（EU・ベトナム自由貿易協定）に加え、二国間のFTAも重層的に整備されており、主要な輸出先に対して関税上の優位性を確保しています。OECDによれば、対内FDIストックの61%は製造業に集中しており、この外交・通商構造がFDI吸引力の基盤となっています。</p><p>投資家にとって重要なのは、この構造が「保険」として機能する点です。米中対立が激化し、サプライチェーンの分断が進む環境下では、一方の陣営に組み込まれた国は他方からの制裁や規制の対象となるリスクを負います。ベトナムの竹外交は、このリスクを構造的に低減する仕組みです。もちろん万能ではありません。対米輸出依存（全体の29%）と原産地規制強化のリスクは常に意識すべきですし、南シナ海の領有権問題は中国との関係における潜在的な火種です。しかし、ベトナムが米中のいずれか一方に全面的に与するシナリオの確率は低く、この「どちらにも倒れない」外交姿勢そのものが、長期投資のリスクプレミアムを引き下げる要因となります。</p></div>
+  <div class="reveal"><div class="section-subtitle">6-3. 制度と政策</div><p>新興国投資において最も見落とされやすいリスクのひとつが、制度の後退です。経済が成長しても、外資規制の強化、資本移動の制限、政策の予測不可能性といった制度リスクが高まれば、投資リターンは大きく毀損されます。ベトナムにおいてこのリスクが相対的に低いと判断する根拠は、対外開放が一時的な政策選択ではなく、国家運営の基本原則として定着している点にあります。</p><p>ベトナムの対外開放度は、貿易総額がGDPの約2倍に達する水準に端的に表れています。これはASEAN主要国の中でもシンガポールに次ぐ水準であり、経済成長が貿易と外資に強く依存する構造を反映しています。こうした構造のもとでは、外資を排除する方向への政策転換は、政権にとって自国経済を毀損する行為に直結するため、制度の後退に対する内在的なブレーキが働きます。</p><p>2025年に採択されたResolution 68-NQ/TWは、民間経済を「国民経済の最も重要な原動力」と明確に位置づけました。共産党一党体制のもとでこの文言が公式に採用されたことの意味は大きく、民間セクターと外資の役割を国家戦略の中核に据える姿勢が確認されたと解釈できます。資本市場においても、2024年以降、外国機関投資家の事前資金規制の緩和、決済実務の標準化、FOL（外国人保有上限）の通知制度の統一（Decree 245）といった制度改正が相次いでいます。これらは個別の技術的改善にとどまらず、FTSE EM昇格からMSCI EM昇格へとつながる制度改善の連鎖の一部として位置づけられます。</p><p>もちろん、一党体制のもとでの政策決定には透明性の課題があり、汚職や行政手続きの煩雑さは依然として実務上のハードルです。しかし、改革の方向性そのものが逆転するリスクは、ベトナムの経済構造を踏まえれば低いと考えます。「開放」が政策選択ではなく国是であるという点こそが、長期投資家にとっての安心材料です。</p></div>
+  <div class="reveal"><div class="section-subtitle">6-4. インフラと供給力</div><p>ベトナムの物流インフラは歴史的な転換点を迎えています。注目すべきは個別プロジェクトの規模ではなく、高速道路・空港・鉄道・港湾・水路という複数のインフラが同じ時期に結節点で接続し始めるという「マルチモーダル同期」です。</p><p>これまでのベトナムのインフラ投資は、「点」の整備が先行し、「線」としての接続が追いつかない構造的課題を抱えてきました。2026年はこの構造が変わり始める年です。南北を貫く東線高速道路は3,000km超が完成し、最終区間の工事も2026年中の完了を目指して進んでいます。</p><p>空のインフラも同時に動いています。ロンタイン国際空港は2026年6月の商業運用開始が見込まれています。第1期の処理能力は年間旅客2,500万人・貨物120万トン。全面完成時には旅客1億人・貨物500万トンの処理能力を持ち、東南アジア最大級の空港となります。</p><p>鉄道も動き出しています。中国国境とハノイを結ぶ77億ドル規模の鉄道プロジェクトが初期工事段階に入り、将来的にクロスボーダー輸送の選択肢を広げます。加えて、南北高速鉄道（約673億ドル）は2027年の起工が想定されており、完成すれば南北間の人流・物流を根本的に変える国家プロジェクトとなります。</p><p>港湾も拡張フェーズに入っており、南部・北部・中部の主要3港群で改修・増強が進行中です。南部では世界銀行融資による内陸水運回廊の整備も2026年末に着工し、メコンデルタと深海港群を結ぶ水路ネットワークを近代化します。</p><p>これらが投資判断に対して持つ意味は明確です。ベトナムの物流コストはGDP比約16%と、シンガポール（8%）やマレーシア（12%）、世界平均（約11%）と比べて高止まりしてきました。インフラの同時接続はこの構造にメスを入れるものです。物流コストの圧縮は、製造業の立地競争力と内需セクターの利益率の両方を押し上げる効果を持ちます。政府は2025年10月に物流コストの段階的引き下げを柱とする開発戦略を承認しており、インフラ整備はその実行手段です。</p></div>
+</section>
+
+<!-- ══ 07 ══ -->
+<section class="section" id="s07">
+  <div class="section-header reveal"><div class="section-number">07</div><div class="section-title">日本とベトナム</div></div>
+  <div class="reveal"><p>在日ベトナム人は2024年末時点で63万人を超え、在留外国人の国籍別では中国に次ぐ第2位です。2023年11月に日越関係は包括的戦略的パートナーシップへ格上げされ、約2,000社の日本企業がベトナムに進出しています。日本はベトナムにとって最大のODA供与国でもあります。</p><p>これらの数字は、日越関係が通常の二国間経済関係とは質的に異なる「構造的な組み込み」に達していることを示しています。この関係を「ヒト」「カネ」「制度」の3層で整理します。</p></div>
+  <div class="reveal"><div class="section-subtitle">ヒト</div><p>63万人の在日ベトナム人は、日本社会に最も急速に浸透した外国人コミュニティのひとつです。技能実習生・特定技能労働者・留学生として日本の製造業・サービス業・介護の現場を支えると同時に、日本語能力と日本式の品質管理・労働規律を身につけた人材の層を蓄積しています。これらの人材は帰国後、日系企業のベトナム拠点における中間管理職やサプライヤーとの橋渡し役として機能します。つまり、在日ベトナム人の増加は日本の労働力不足への対応であると同時に、ベトナム側における「日本式経営を理解する人材プール」の形成でもあります。この双方向の人的資本の蓄積は、時間が経つほど複利的に効果を発揮する性質を持っています。</p></div>
+  <div class="reveal"><div class="section-subtitle">カネ</div><p>日本はベトナムにとって累計で最大のODA供与国であり、その規模は2兆円を超えます。ODAが果たした役割は単なる資金供与にとどまりません。ハノイの都市鉄道、南北高速道路の初期区間、火力発電所、港湾整備といった大型インフラプロジェクトは、いずれも日本のODAが起点となっています。加えて、約2,000社の日本企業がベトナムに直接投資を行っており、イオン、ホンダ、トヨタ、パナソニックといった消費者に身近なブランドから、住友商事やSMBCグループのようなインフラ・金融の担い手まで、ベトナム経済のあらゆるレイヤーに日本企業が関与しています。</p></div>
+  <div class="reveal"><div class="section-subtitle">制度</div><p>これは最も見えにくいが、最も持続的な影響を持つ層です。日本のODAと企業進出が残したのは、物理的なインフラだけではありません。交通システムの規格、電力グリッドの設計思想、工場の品質管理体系、建設基準、さらには行政手続きの一部に至るまで、日本の「制度インフラ」がベトナムの産業基盤に組み込まれています。この制度的な親和性は、日本企業にとってベトナム進出のハードルを構造的に下げる要因であり、他国の企業にはない情報優位をもたらします。</p><p>日本の投資家にとって、この構造が持つ意味は二重です。第一に、ベトナム経済の成長は「無関係な外国の出来事」ではなく、日本の企業・資金・人材がすでに深く組み込まれた成長であるということです。ベトナムの銀行セクターが拡大すれば、SMBCやみずほの出資先の価値が上がります。消費市場が拡大すれば、イオンやユニクロの売上が伸びます。ベトナムへの投資は「日本と接続した成長への参加」であり、その接続の太さは他のASEAN諸国と比較しても際立っています。</p><p>第二に、この構造的な組み込みは「情報の非対称性」を日本の投資家に有利に働かせます。ベトナムに関する情報は、日本語で、日本企業の視点から、豊富に蓄積されています。在日ベトナム人コミュニティを通じた現地情報へのアクセス、日系企業のIR資料を通じたベトナム事業の実態把握、ODAプロジェクトの公開資料を通じたインフラ整備の進捗確認——これらは、欧米の機関投資家には容易に得られない情報チャネルです。</p><p>ベトナムの成長には、日本の企業・資金・制度がすでに深く組み込まれています。その関係は、20年以上にわたるODA、2,000社の企業進出、63万人の人的交流を通じて、簡単には代替できない厚みに達しています。日本の投資家にとって、ベトナムへの投資は最も「土地勘のある」新興国投資であり、その優位性を活かさない手はありません。</p></div>
+</section>
+</div>
+
+<!-- ══ PART II ══ -->
+<div class="part-divider full-bleed reveal">
+  <div class="pd-bg" style="background:var(--navy-deep)"></div>
+  <div class="pd-overlay" style="background:linear-gradient(170deg,var(--navy-deep) 0%,var(--navy) 50%,var(--navy-deep) 100%)"></div>
+  <div class="pd-content">
+    <div class="part-label">Part II</div>
+    <div class="part-num">II</div>
+    <div class="part-title">ベトナム株式市場</div>
+    <div class="part-sub">投資判断の材料</div>
+  </div>
+</div>
+
+<!-- ══ STATEMENT: $352B ══ -->
+<div class="section-hero full-bleed reveal">
+  <div class="sh-num">$352B</div>
+  <div class="sh-label">Section 08 — 市場構造</div>
+  <div class="sh-text">時価総額3,520億ドルのうち<br>実効投資可能市場は600〜900億ドル</div>
+  <div class="sh-rule"></div>
+  <div class="sh-sub">「制約」そのものがベトナム株式市場の投資機会の本質</div>
+</div>
+
+<div class="content">
+<!-- ══ 08 ══ -->
+<section class="section" id="s08">
+  <div class="section-header reveal"><div class="section-number">08</div><div class="section-title">市場構造 — 実効投資可能市場</div></div>
+  <div class="reveal"><p>ベトナム株式市場の時価総額は3,520億ドルですが、国営・戦略株主の保有分、FOL制約、浮動株調整、流動性フィルターを差し引くと、外国人機関投資家にとっての実効投資可能市場は600億～900億ドル程度にとどまります。</p><div class="table-wrap"><table><thead><tr><th>項目</th><th>控除額</th><th>残高</th><th>根拠</th></tr></thead><tbody><tr><td>全体時価総額</td><td>—</td><td>$352B</td><td>CEIC 2026/2実績値</td></tr><tr><td>国営・戦略株主</td><td>−$120B</td><td>$232B</td><td>OECD推計約2,100社SOE</td></tr><tr><td>FOL制約</td><td>−$65B</td><td>$167B</td><td>業種別上限から試算</td></tr><tr><td>浮動株調整</td><td>−$55B</td><td>$112B</td><td>創業者・関連会社保有分</td></tr><tr><td>流動性フィルター</td><td>−$35B</td><td>$77B</td><td>機関投資家最低約定規模</td></tr><tr><td style="font-weight:600;color:var(--gold)">実効投資可能市場</td><td>—</td><td style="font-weight:600">$60–90B</td><td>全体の17–26%</td></tr></tbody></table></div><div class="table-note">出所：CEIC、OECD、各社開示資料、当社推計。</div></div>
+
+  <div class="reveal">
+    <div class="chart-block">
+      <div class="chart-legend">
+        <span><span class="dot" style="background:#C5A572"></span>外国人機関投資家がアクセス可能な残高</span>
+        <span><span class="dot" style="background:#3D4A60;opacity:.5"></span>制約・控除により消失した分</span>
+      </div>
+      <div style="position:relative;width:100%;height:220px">
+        <canvas id="chart-waterfall"></canvas>
+      </div>
+      <div class="chart-caption">各制約要因を差し引いた後の残高（十億ドル）。実効投資可能市場は全体の17–26%。出所：当社推計。</div>
+      <div class="chart-guard">
+        <div class="chart-guard-title">前提・方法論</div>
+        <ul>
+          <li><strong>国営・戦略株主（$120B控除）：</strong>OECDのSOE推計（約2,100社）に基づくペトロベトナム・ビナコミン等の非流通保有分。政府方針次第でSOE株式化により段階的に流通可能ユニバースに加わる。</li>
+          <li><strong>FOL制約（$65B控除）：</strong>銀行30%・一般業種49%・特定業種0%の規制上限から加重平均で試算。実際は銘柄ごとに異なり、人気銘柄ではすでにFOL上限に張り付いているケースが多い。</li>
+          <li><strong>浮動株調整（$55B控除）：</strong>創業家・関連会社保有分の推計。ビングループ等の大型株で特に顕著。</li>
+          <li><strong>流動性フィルター（$35B控除）：</strong>機関投資家が必要とする日次売買代金水準（目安$1M以上）でのスクリーニング結果。</li>
+          <li><strong>2030年見通し（$120-150B）：</strong>FTSE EM組入れ・FOL統一・SOE株式化が進捗した場合の上限シナリオ。実現速度は政策次第。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="reveal"><p>全体の17～26％しかアクセスできないという事実は、一見するとネガティブに映ります。しかし、この「制約」こそがベトナム株式市場の投資機会の本質です。</p><p>各控除項目を順に見ていきます。最大の控除要因は国営・戦略株主の保有分（約1,200億ドル）です。ベトナムでは銀行・通信・エネルギーなどの主要セクターで国が大株主のままであり、これらの株式は市場に出てきません。ただし、SOE（国有企業）の株式化・持分売却は政府の明確な政策目標であり、進展するたびに投資可能ユニバースが段階的に拡大します。</p><p>次に大きいのがFOL（外国人保有上限）制約です。銀行は30％、一部の業種では49％または0％と、セクターごとに上限が異なります。人気銘柄ではすでにFOL上限に張り付いているケースもあり、買いたくても買えないという状況が構造的に存在します。2024年以降、統一FOL制度の導入に向けた議論が進んでおり、実現すれば最大の制約解放イベントとなります。</p><p>重要なのは、この表を「現在のスナップショット」ではなく「変化の方向性」とあわせて読むことです。FTSE EM組入れ、FOL統一、SOE株式化が進めば、実効投資可能市場は2030年までに1,200億～1,500億ドルへの拡大が見込まれます。</p></div>
+</section>
+
+<!-- ══ 09 ══ -->
+<section class="section" id="s09">
+  <div class="section-header reveal"><div class="section-number">09</div><div class="section-title">制度面の改善余地 — 構造的な投資機会</div></div>
+  <div class="reveal"><p>2025年5月にKRX新取引システムが稼働しました。これは、ベトナムが韓国取引所技術を採用し、取引処理能力とリスク管理を国際水準に引き上げたことを意味します。FTSE Russellは2025年9月にベトナムのセカンダリー・エマージング市場への再分類を公表し、実施は2026年9月の予定です（2026年3月の中間レビューが条件）。</p><p>ベトナム政府は、2030年までにMSCIベースでのエマージング市場入りを長期目標として掲げています。FTSE EM昇格が実現すれば、次のMSCI昇格に向けた制度改善のモメンタムが加速することが期待されます。制度改善は単発のイベントではなく、FTSEからMSCIへと続く段階的な市場昇格のプロセスとして、累積的に作用し得る点が重要です。</p></div>
+</section>
+
+<!-- ══ 10 ══ -->
+<section class="section" id="s10">
+  <div class="section-header reveal"><div class="section-number">10</div><div class="section-title">制約解放のリターン源泉 — 先行事例に学ぶ</div></div>
+  <div class="reveal"><p>パッシブフローは、再分類の公表から実施までの期間に意識されやすい一方、アクティブファンドの先回り買いは実施の数か月前から段階的に始まりやすいと考えられます。過去の先行事例を見ると、カタール（FTSE FM→EM、2014年）は前後12か月で約+30％、クウェート（2018年）は約+18％、サウジアラビア（FTSE/MSCI EM、2019年）は約+12％のリターンを記録しています。</p><p>昇格の真のインパクトは、一時的なフローそのものよりも、制度改善の連鎖にあります。FTSEエマージング市場入りに向けて導入された制度改革は、単発のイベントではなく、MSCIエマージング市場入りを目指す次の改革段階の土台となります。</p><p>もっとも、実効投資可能市場がなお限られるなかでパッシブフローが集中すれば、短期的には需給主導のオーバーシュートが生じやすい点には留意が必要です。投資実行は一括ではなく、段階的な配分が望ましいと考えます。</p></div>
+</section>
+
+<!-- ══ 11 ══ -->
+<section class="section" id="s11">
+  <div class="section-header reveal"><div class="section-number">11</div><div class="section-title">なぜ今なのか — 2026-2030 カタリストの集中</div></div>
+  <div class="reveal"><p>現在のベトナムは、制度改善・指数再分類・インフラ整備・SOE株式化という複数のカタリストが、2026–2030年の5年間に集中しています。これは、「今注目すべき合理的理由」があることを意味します。</p><div class="table-wrap"><table><thead><tr><th>時期</th><th>イベント</th><th>期待される効果</th></tr></thead><tbody><tr><td>2026 Q1-Q2</td><td>FTSE EMリバランス</td><td>パッシブ $1.5-2.5B流入</td></tr><tr><td>2026/6</td><td>ロンタイン空港開業</td><td>南部の物流能力拡大</td></tr><tr><td>2026/9</td><td>FTSE EM組入れ発効</td><td>インデックス・トラッカーによる機械的買い</td></tr><tr><td>2026-27</td><td>MSCI EM Watchlist入り</td><td>次の昇格への期待形成</td></tr><tr><td>2027-28</td><td>SOE株式化の進展</td><td>投資可能ユニバース拡大</td></tr><tr><td>2028-30</td><td>MSCI EM昇格プロセス</td><td>追加パッシブ $3-5B</td></tr></tbody></table></div></div>
+  <div class="reveal"><div class="section-subtitle">与信サイクルの現在地</div><p>2022～2023年の不動産調整局面を経て、与信成長率は2024年末に17.9％まで回復しました。銀行セクターのバリュエーションはPBR 1倍台前半、ROEは10％台後半を維持しており、与信サイクルは底打ちを終え、中盤に入りつつある局面と捉えられます。</p></div>
+  <div class="reveal"><div class="section-subtitle">最初の5年のリターン試算</div><div class="table-wrap"><table><thead><tr><th>ドライバー</th><th>保守的</th><th>中心</th><th>楽観的</th></tr></thead><tbody><tr><td>EPS成長（年率）</td><td>12%</td><td>17%</td><td>22%</td></tr><tr><td>PER変化</td><td>12x → 12x</td><td>12x → 14x</td><td>12x → 16x</td></tr><tr><td>為替（VND/USD）</td><td>年 -2%</td><td>年 -1%</td><td>横ばい</td></tr><tr><td style="font-weight:600">5年累積リターン</td><td>+50% (CAGR 8%)</td><td style="color:var(--gold);font-weight:600">+110% (CAGR 16%)</td><td>+190% (CAGR 24%)</td></tr></tbody></table></div><div class="table-note">前提：VN Index起点1,880pt、PER12倍。中心シナリオはFTSE EM組入れ効果とMSCI EM期待のバリュエーション拡大を含む。当社推計。</div></div>
+  <div class="reveal">
+    <div class="chart-block">
+      <div class="chart-legend">
+        <span><span class="dot" style="background:#3D4A60;opacity:.6"></span>保守的（CAGR 8%）</span>
+        <span><span class="dot" style="background:#C5A572"></span>中心（CAGR 16%）</span>
+        <span><span class="dot" style="background:#D4BA8E"></span>楽観的（CAGR 24%）</span>
+      </div>
+      <div style="position:relative;width:100%;height:200px">
+        <canvas id="chart-returns"></canvas>
+      </div>
+      <div class="chart-caption">5年累積リターン試算（USD建て）。起点VN Index 1,880pt、PER12倍。中心シナリオはFTSE EM+MSCI EM期待含む。出所：当社推計。</div>
+      <div class="chart-guard">
+        <div class="chart-guard-title">前提・方法論</div>
+        <ul>
+          <li><strong>VN Indexはプライスリターンで計算（配当再投資なし）。</strong>配当利回り約2-3%を加算した場合、各シナリオの実質リターンはさらに上振れる。</li>
+          <li><strong>EPS成長の根拠（ベース17%）：</strong>2022-2024年の上場企業全体EPS成長率の実績（22.3%/18.5%/12.1%）に対し、与信サイクルの成熟・競争激化を織り込んで保守的に設定。</li>
+          <li><strong>PER拡張（12x→14x）の根拠：</strong>FTSE EM組入れによるバリュエーション・ディスカウントの縮小を想定。韓国・サウジアラビアのEM昇格前後では平均+2-3ターンの拡張実績あり。</li>
+          <li><strong>起点PER12倍：</strong>2026年3月時点の実績ベースPER。新興国平均（約14-15倍）対比で依然ディスカウント状態。</li>
+          <li><strong>為替前提：</strong>保守的 -2%/年、中心 -1%/年、楽観的 横ばい。過去10年実績は年平均 -1.5〜-2.0%。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 12 ══ -->
+<section class="section" id="s12">
+  <div class="section-header reveal"><div class="section-number">12</div><div class="section-title">セクター分析と構造リスク</div></div>
+  <div class="reveal"><p>ベトナム経済の高成長と、上場株式市場でその果実をどのように取り込むかは、切り分けて考える必要があります。外資製造業の利益の多くは本国へ還流するため、ベトナム株式市場で捕捉できるリターンは、基本的に内需セクター経由に限られます。</p><div class="table-wrap"><table><thead><tr><th>セクター</th><th>構成比</th><th>成長ドライバー</th><th>構造リスク</th></tr></thead><tbody><tr><td>銀行・金融</td><td>~40%</td><td>与信17.9%、リテール拡大</td><td>NPL実態把握困難、FOL 30%</td></tr><tr><td>不動産</td><td>~25%</td><td>都市化率45%→55%</td><td>規制変更、過去の流動性危機</td></tr><tr><td>消費・小売</td><td>~10%</td><td>月間所得+9.1%、中間層60%超</td><td>外資ブランドとの競争</td></tr><tr><td>素材・資本財</td><td>~15%</td><td>インフラ投資、稼働率79%</td><td>景気循環、中国製品との競争</td></tr><tr><td>ハイテク・製造</td><td>~5%</td><td>Samsung・Amkor等の集積</td><td>上場ユニバース極めて限定的</td></tr></tbody></table></div><div class="table-note">構成比はHOSE上場時価総額ベースの概算。</div></div>
+  <div class="reveal">
+    <div class="chart-block">
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:nowrap">
+        <div style="position:relative;width:150px;height:150px;flex-shrink:0">
+          <canvas id="chart-sector" width="150" height="150"></canvas>
+        </div>
+        <div style="flex:1">
+          <div id="sector-legend" style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:#3D4A60"></div>
+        </div>
+      </div>
+      <div class="chart-caption">HOSE上場時価総額ベース概算。銀行・不動産で約65%を占める偏重が最大の構造リスク。</div>
+    </div>
+  </div>
+  <div class="reveal"><p>構造リスクとして最も重要なのは、銀行・不動産で時価総額の約65％を占める偏重です。2022–2023年の不動産社債デフォルト危機時には、VN Indexが高値から約35％下落した実績があります。セクター内の分散と段階的配分で対応することが重要です。</p></div>
+</section>
+</div>
+
+<!-- ══ PART III — Ha Long Bay (Verified Vietnam) ══ -->
+<div class="part-divider full-bleed reveal">
+  <div class="pd-bg" style="background:url('https://images.unsplash.com/photo-1573790387438-4da905039392?w=1920&q=80&fit=crop') center/cover no-repeat"></div>
+  <div class="pd-overlay" style="background:linear-gradient(170deg,rgba(13,21,38,.75) 0%,rgba(26,39,68,.55) 50%,rgba(13,21,38,.80) 100%)"></div>
+  <div class="pd-content">
+    <div class="part-label">Part III</div>
+    <div class="part-num">III</div>
+    <div class="part-title">リスクとシナリオ</div>
+  </div>
+</div>
+
+<div class="content">
+<!-- ══ 13 ══ -->
+<section class="section" id="s13">
+  <div class="section-header reveal"><div class="section-number">13</div><div class="section-title">リスクの深掘り</div></div>
+  <div class="reveal"><div class="section-subtitle">13-1. VND/USD 為替リスク</div><p>過去10年のVNDの対ドル減価は年平均約1.5–2.0％。FDI流入、経常収支改善、外貨準備約900億ドル、SBVの管理変動相場制が支えています。米国関税強化→輸出鈍化→FDI減速というシナリオでは下落圧力が強まりますが、年-3％のストレス下でもEPS 17％成長ならUSD建てプラスを維持できます。</p><div class="table-wrap"><table><thead><tr><th>為替 \\ EPS→</th><th>10%</th><th>14%</th><th>17%</th><th>20%</th><th>22%</th></tr></thead><tbody><tr><td>年-3%</td><td>+20%</td><td>+45%</td><td>+65%</td><td>+85%</td><td>+100%</td></tr><tr><td>年-2%</td><td>+30%</td><td>+55%</td><td>+80%</td><td>+105%</td><td>+120%</td></tr><tr><td>年-1%</td><td>+40%</td><td>+70%</td><td>+100%</td><td>+130%</td><td>+150%</td></tr><tr><td>横ばい</td><td>+50%</td><td>+85%</td><td>+120%</td><td>+155%</td><td>+185%</td></tr></tbody></table></div><div class="table-note">5年累積リターン（USD建て）。PER 12x→13x。当社推計。</div></div>
+  <div class="reveal">
+    <div class="chart-block" id="heatmap-fx-wrap">
+      <div style="font-size:12px;color:#8A94A6;margin-bottom:10px">5年累積リターン（USD建て） — 色が濃いほど高リターン</div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div id="heatmap-fx"></div></div>
+      <div class="chart-caption">PER 12x→13x。各セルの数値は5年累積リターン（%）。出所：当社推計。</div>
+      <div class="chart-guard">
+        <div class="chart-guard-title">前提・方法論</div>
+        <ul>
+          <li><strong>VN Indexはプライスリターンで計算（配当再投資なし）。</strong></li>
+          <li><strong>計算式：</strong>5年累積リターン = (EPS成長率)^5 × (PER変化率) × (為替変化率)^5 − 1。PERは12x→13xで固定（バリュエーション中立シナリオ）。</li>
+          <li><strong>為替ストレス（年-3%）：</strong>2015年の人民元切り下げ連鎖に類似した外部ショックを想定した上限ストレス。VNDの管理変動相場制の性格上、急落よりも漸進的減価が基本シナリオ。</li>
+          <li><strong>EPS成長率の幅（10-22%）：</strong>左端10%は景気後退・与信反転シナリオ、右端22%は与信加速・バリュエーション拡大の重なりシナリオ。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="reveal"><div class="section-subtitle">13-2. 与信サイクル反転リスク</div><p>前述の不動産社債危機時と同様の調整リスクは常に存在します。不動産エクスポージャーは住宅・工業団地に限定し、配分時期を分散させることで対応します。</p></div>
+  <div class="reveal"><div class="section-subtitle">13-3. 地政学リスク</div><p>ベトナムは「China+1」の最大の受け皿ですが、米国が対中迂回輸出を問題視すれば影響が波及します。対米輸出依存29％、原産地規制強化、南シナ海問題が主なリスク要因です。ただし、セクション6で述べた15か国・機関との包括的戦略パートナーシップと多層的FTA網が、特定国依存を下げています。米中のいずれかに全面的に与するリスクは低いと考えます。</p></div>
+</section>
+
+<!-- ══ 14 ══ -->
+<section class="section" id="s14">
+  <div class="section-header reveal"><div class="section-number">14</div><div class="section-title">2045年シナリオと感応度分析</div></div>
+  <div class="reveal"><div class="table-wrap"><table><thead><tr><th>指標</th><th>ベア</th><th>ベース</th><th>ブル</th><th>ハイコンビクション</th></tr></thead><tbody><tr><td>GDP/人(2035)</td><td>$8,500</td><td>$11,800</td><td>$14,500</td><td>$16,000</td></tr><tr><td>GDP/人(2045)</td><td>$13,000</td><td style="color:var(--gold);font-weight:600">$24,200</td><td>$32,000</td><td>$38,000+</td></tr><tr><td>時価総額/GDP</td><td>50-60%</td><td>70-90%</td><td>100-120%</td><td>120-150%</td></tr><tr><td>時価総額(2045)</td><td>$1.0T</td><td>$2.0T</td><td>$3.5T</td><td>$4.5T+</td></tr><tr><td>名目CAGR</td><td>約7%</td><td>約9%</td><td>約12%</td><td>約14%</td></tr></tbody></table></div></div>
+  <div class="reveal">
+    <div class="chart-block">
+      <div class="chart-legend">
+        <span><span class="dot" style="background:#3D4A60;opacity:.7"></span>2035年 GDP/人</span>
+        <span><span class="dot" style="background:#C5A572"></span>2045年 GDP/人</span>
+      </div>
+      <div style="position:relative;width:100%;height:240px">
+        <canvas id="chart-scenario"></canvas>
+      </div>
+      <div class="chart-caption">4シナリオの一人当たりGDP推計（USD）。ベースケース2045年は$24,200（現在の5.1倍）。出所：当社推計。</div>
+    </div>
+  </div>
+  <div class="reveal"><p>ハイコンビクションの前提：① 家計金融資産の預金→株式シフト、② 年金・保険マネーの国内株式流入、③ SOE大型上場、④ 投資文化定着、⑤ MSCI EM完了とDM議論開始。すべてが実現する保証はありませんが、確率は低くはありません。生産年齢人口のピーク後も、生産性上昇・都市化・金融深化が成長を駆動します。</p></div>
+  <div class="reveal"><div class="section-subtitle">VN Index 2045年感応度</div><p>ベースシナリオの試算値は約11,800pt（2025年3月対比約6.3倍、CAGR 9.7％）。</p><div class="table-wrap"><table><thead><tr><th>名目GDP↓ MC/GDP→</th><th>70%</th><th>80%</th><th>90%</th><th>100%</th><th>110%</th><th>120%</th></tr></thead><tbody><tr><td>5%</td><td>7,050</td><td>8,058</td><td>9,065</td><td>10,072</td><td>11,079</td><td>12,086</td></tr><tr><td>6%</td><td>8,477</td><td>9,689</td><td>10,900</td><td>12,111</td><td>13,322</td><td>14,533</td></tr><tr><td style="font-weight:600">7%</td><td>10,176</td><td style="color:var(--gold);font-weight:600">11,630</td><td>13,084</td><td>14,538</td><td>15,991</td><td>17,445</td></tr><tr><td>8%</td><td>12,195</td><td>13,938</td><td>15,680</td><td>17,422</td><td>19,164</td><td>20,906</td></tr><tr><td>9%</td><td>14,591</td><td>16,676</td><td>18,760</td><td>20,845</td><td>22,929</td><td>25,014</td></tr></tbody></table></div><div class="table-note">起点1,880pt。縦軸は名目GDP成長率（実質+インフレ3％）。当社推計。</div></div>
+  <div class="reveal">
+    <div class="chart-block" id="heatmap-vni-wrap">
+      <div style="font-size:12px;color:#8A94A6;margin-bottom:10px">VN Index 2045年予測値（pt）— 色が濃いほど高水準 ／ ★ = ベースシナリオ</div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div id="heatmap-vni"></div></div>
+      <div class="chart-caption">起点1,880pt。縦軸は名目GDP成長率（実質+インフレ3%）。出所：当社推計。</div>
+      <div class="chart-guard">
+        <div class="chart-guard-title">前提・方法論</div>
+        <ul>
+          <li><strong>VN Indexはプライスリターンで計算（配当再投資なし）。</strong></li>
+          <li><strong>計算式：</strong>VN Index 2045 = 1,880 × (名目GDP倍率²⁰) × (MC/GDP比率₂₀₄₅ ÷ MC/GDP比率₂₀₂₅)。</li>
+          <li><strong>名目GDP成長率：</strong>実質GDP成長率（縦軸の各値 − 3%）＋インフレ率3%。例：縦軸7%＝実質4%＋インフレ3%。</li>
+          <li><strong>現在のMC/GDP比率：</strong>約55-60%（2026年2月時点、CEIC）。横軸80%前後がベースシナリオに対応。</li>
+          <li><strong>ベースシナリオ（★）：</strong>名目GDP成長率7%×MC/GDP 80%で11,630pt（CAGR 9.7%）。現在比約6.2倍。</li>
+          <li><strong>本感応度はEPS成長とバリュエーション拡大を独立変数として扱い、セクター構成変化・SOE大型上場による指数希薄化は未考慮。</strong></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ おわりに ══ -->
+<section class="section" id="outro">
+  <div class="section-header reveal"><div class="section-title">おわりに</div></div>
+  <div class="reveal"><p>ベトナムは、20年単位で捉えるべき国です。ドイモイから40年、市場経済化と産業高度化を着実に進め、「仕上げの20年」の入口に立っています。</p><p>本レポートは、成長余地を示し、制約解放のメカニズムを整理し、「前提が崩れたら何が起きるか」を明示した上で、「上場市場で何を取りに行くべきか」までを投資判断の材料として提示しました。最も重要なのは、「2026–2030年の制度改善の初動を取りに行くこと」です。</p></div>
+  <div class="reveal">
+    <div class="hl-box" style="border-left:none;border-top:4px solid var(--gold);text-align:center;padding:36px 28px">
+      <p style="font-family:'Noto Serif JP',serif;font-size:clamp(16px,2.5vw,19px);line-height:2;color:var(--cream)">2005年に描いた構図は、おおむね想定どおりに進んできました。<br>だからこそ今、私たちはあらためて、次の20年を語ります。</p>
+    </div>
+  </div>
+  <div class="reveal">
+    <div class="table-wrap"><table><thead><tr><th>項目</th><th>概要</th></tr></thead><tbody><tr><td style="font-weight:600;white-space:nowrap">長期仮説</td><td>GDP/人 $5,000→高所得国化。成長率逓減でもベース5倍。</td></tr><tr><td style="font-weight:600;white-space:nowrap">中期ドライバー</td><td>FTSE EM(2026/9)→MSCI EM(2030目標)。FOL統一・SOE株式化。</td></tr><tr><td style="font-weight:600;white-space:nowrap">収益の源泉</td><td>波及メカニズムの受け皿である内需セクター（銀行・不動産・消費）。</td></tr><tr><td style="font-weight:600;white-space:nowrap">最大リスク</td><td>銀行・不動産で時価総額の約65%。与信反転、為替、地政学。</td></tr><tr><td style="font-weight:600;white-space:nowrap">結論</td><td>カタリストが最初の5年に集中。段階的配分でエントリー。</td></tr></tbody></table></div>
+  </div>
+</section>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer full-bleed">
+  <div class="footer-brand">Capital Research & Investments</div>
+  <div class="footer-year">2026 &nbsp;|&nbsp; Confidential</div>
+  <div class="footer-disc">免責事項：本資料は情報提供を目的として作成されたものであり、特定の金融商品の勧誘を目的とするものではありません。投資に関する最終決定は、お客様ご自身の判断と責任において行ってください。</div>
+  <div class="footer-disc" style="margin-top:12px;font-size:10px;opacity:.25">Photos: Unsplash (free license). Cover by Tron Le (HCMC). Rice terraces & Ha Long Bay by various photographers.</div>
+</div>
+
+</div><!-- main -->
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+     ════════════════════════════════════════ -->
+<script>
+// Progress bar
+const prog=document.getElementById('prog');
+window.addEventListener('scroll',()=>{
+  const s=document.documentElement.scrollTop;
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(s/h*100)+'%';
+},{passive:true});
+
+// Scroll reveal — only if IntersectionObserver works
+try {
+  const revObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')});
+  },{threshold:0.05,rootMargin:'0px 0px -20px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>revObs.observe(el));
+  // Observer works — enable animations
+  document.documentElement.classList.add('reveal-ready');
+  // Fallback: if nothing is revealed after 3s, force-show everything
+  setTimeout(()=>{document.querySelectorAll('.reveal:not(.vis)').forEach(el=>el.classList.add('vis'))},3000);
+} catch(e) {
+  // Observer failed — content stays visible (no .reveal-ready on html)
+}
+
+// Side nav active state
+const links=document.querySelectorAll('.sidenav-link[data-nav]');
+const secs=[];
+links.forEach(l=>{const id=l.getAttribute('href').slice(1);const el=document.getElementById(id);if(el)secs.push({el,link:l})});
+const navObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{const item=secs.find(s=>s.el===e.target);if(item)item.link.classList.toggle('active',e.isIntersecting)});
+},{rootMargin:'-20% 0px -70% 0px'});
+secs.forEach(s=>navObs.observe(s.el));
+
+// Nav click (smooth scroll)
+document.querySelectorAll('.sidenav-link[data-nav], .mobile-nav-overlay a').forEach(l=>{
+  l.addEventListener('click',e=>{
+    e.preventDefault();
+    const t=document.querySelector(l.getAttribute('href'));
+    if(t)t.scrollIntoView({behavior:'smooth',block:'start'});
+    // Close mobile nav
+    document.getElementById('mnOverlay').classList.remove('open');
+  });
+});
+
+// Mobile nav toggle
+document.getElementById('mnToggle').addEventListener('click',()=>{
+  document.getElementById('mnOverlay').classList.add('open');
+});
+document.getElementById('mnClose').addEventListener('click',()=>{
+  document.getElementById('mnOverlay').classList.remove('open');
+});
+
+// Part divider parallax (subtle)
+document.querySelectorAll('.part-divider .pd-bg').forEach(bg=>{
+  const parent=bg.parentElement;
+  window.addEventListener('scroll',()=>{
+    const rect=parent.getBoundingClientRect();
+    if(rect.bottom>0&&rect.top<window.innerHeight){
+      const offset=(rect.top/window.innerHeight)*20;
+      bg.style.transform='translateY('+offset+'px)';
+    }
+  },{passive:true});
+});
+// ══════════════════════════════════════
+// CHART 4 — Northeast Asia GDP bar (S05)
+// ══════════════════════════════════════
+(function(){
+  var ctx = document.getElementById('chart-asia');
+  if (!ctx) return;
+  var countries = ['日本', '台湾', '韓国', '中国', 'ベトナム'];
+  var gdp = [34720, 37827, 35960, 12500, 4717];
+  var colors = ['rgba(197,165,114,0.6)','rgba(197,165,114,0.6)','rgba(197,165,114,0.6)','rgba(197,165,114,0.6)','rgba(197,165,114,1)'];
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: countries,
+      datasets: [{
+        data: gdp,
+        backgroundColor: colors,
+        borderColor: colors.map(function(c){ return c.replace('0.6','0.8'); }),
+        borderWidth: 1,
+        borderRadius: 3
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return '$' + ctx.parsed.x.toLocaleString(); }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(138,148,166,0.12)' },
+          ticks: {
+            callback: function(v) { return '$' + (v/1000).toFixed(0) + 'k'; },
+            font: { size: 11, family: "'Noto Sans JP',sans-serif" },
+            color: '#8A94A6'
+          }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { font: { size: 12, family: "'Noto Sans JP',sans-serif" }, color: '#3D4A60' }
+        }
+      }
+    }
+  });
+})();
+
+// ══════════════════════════════════════
+// CHART 5 — 5yr Return Scenarios (S11)
+// ══════════════════════════════════════
+(function(){
+  var ctx = document.getElementById('chart-returns');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['保守的', '中心', '楽観的'],
+      datasets: [{
+        data: [50, 110, 190],
+        backgroundColor: ['rgba(61,74,96,0.5)', '#C5A572', '#D4BA8E'],
+        borderColor: ['rgba(61,74,96,0.7)', '#C5A572', '#D4BA8E'],
+        borderWidth: 1,
+        borderRadius: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return '+' + ctx.parsed.y + '% (5年累積)'; }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 13, family: "'Noto Sans JP',sans-serif" }, color: '#3D4A60' }
+        },
+        y: {
+          grid: { color: 'rgba(138,148,166,0.12)' },
+          ticks: {
+            callback: function(v) { return '+' + v + '%'; },
+            font: { size: 11, family: "'Noto Sans JP',sans-serif" },
+            color: '#8A94A6'
+          }
+        }
+      }
+    }
+  });
+})();
+
+// ══════════════════════════════════════
+// CHART 6 — Sector Donut (S12)
+// ══════════════════════════════════════
+(function(){
+  var ctx = document.getElementById('chart-sector');
+  if (!ctx) return;
+  var sectors = ['銀行・金融', '不動産', '素材・資本財', '消費・小売', 'ハイテク・製造', 'その他'];
+  var values = [40, 25, 15, 10, 5, 5];
+  var colors = ['#C5A572','#1A2744','#8A94A6','#D4BA8E','#3D4A60','#B4B2A9'];
+  var chart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: sectors,
+      datasets: [{
+        data: values,
+        backgroundColor: colors,
+        borderColor: '#FAFAF6',
+        borderWidth: 2,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: false,
+      width: 150,
+      height: 150,
+      cutout: '60%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ctx.label + ': ~' + ctx.parsed + '%'; }
+          }
+        }
+      }
+    }
+  });
+  // Build custom legend
+  var legend = document.getElementById('sector-legend');
+  if (legend) {
+    sectors.forEach(function(s, i) {
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:6px';
+      row.innerHTML = '<span style="width:10px;height:10px;border-radius:2px;background:' + colors[i] + ';flex-shrink:0"></span><span style="flex:1">' + s + '</span><span style="font-weight:500;color:#1A2744;white-space:nowrap">~' + values[i] + '%</span>';
+      legend.appendChild(row);
+    });
+  }
+})();
+
+// ══════════════════════════════════════
+// HEATMAP 7 — FX Sensitivity (S13)
+// ══════════════════════════════════════
+(function(){
+  var wrap = document.getElementById('heatmap-fx');
+  if (!wrap) return;
+  var rows = ['年-3%', '年-2%', '年-1%', '横ばい'];
+  var cols = ['10%', '14%', '17%', '20%', '22%'];
+  var data = [
+    [20, 45, 65, 85, 100],
+    [30, 55, 80, 105, 120],
+    [40, 70, 100, 130, 150],
+    [50, 85, 120, 155, 185]
+  ];
+  var min = 20, max = 185;
+  function lerp(a, b, t) { return Math.round(a + (b - a) * t); }
+  function cellBg(v) {
+    var t = (v - min) / (max - min);
+    // Interpolate: navy(26,39,68) at 0 → gold(197,165,114) at 1
+    var r = lerp(240, 197, t), g = lerp(245, 165, t), b = lerp(248, 114, t);
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+  function cellColor(v) {
+    var t = (v - min) / (max - min);
+    return t > 0.55 ? '#1A2744' : '#3D4A60';
+  }
+  var tbl = '<table style="min-width:420px;width:100%;border-collapse:collapse;font-size:12.5px">';
+  tbl += '<thead><tr><th style="padding:7px 10px;background:#1A2744;color:#C5A572;font-size:11px;text-align:left;white-space:nowrap">為替 \\ EPS→</th>';
+  cols.forEach(function(c){ tbl += '<th style="padding:7px 10px;background:#1A2744;color:#C5A572;font-size:11px;text-align:center">' + c + '</th>'; });
+  tbl += '</tr></thead><tbody>';
+  rows.forEach(function(row, ri) {
+    tbl += '<tr><td style="padding:7px 10px;font-weight:500;color:#3D4A60;background:#FAFAF6;white-space:nowrap;font-size:12px">' + row + '</td>';
+    data[ri].forEach(function(v) {
+      var bg = cellBg(v); var fg = cellColor(v);
+      tbl += '<td style="padding:7px 10px;text-align:center;background:' + bg + ';color:' + fg + ';font-weight:600">+' + v + '%</td>';
+    });
+    tbl += '</tr>';
+  });
+  tbl += '</tbody></table>';
+  wrap.innerHTML = tbl;
+})();
+
+// ══════════════════════════════════════
+// HEATMAP 8 — VN Index Sensitivity (S14)
+// ══════════════════════════════════════
+(function(){
+  var wrap = document.getElementById('heatmap-vni');
+  if (!wrap) return;
+  var rows = ['5%', '6%', '7%', '8%', '9%'];
+  var cols = ['70%', '80%', '90%', '100%', '110%', '120%'];
+  var colHeader = '時価総額/GDP →';
+  var data = [
+    [7050, 8058, 9065, 10072, 11079, 12086],
+    [8477, 9689, 10900, 12111, 13322, 14533],
+    [10176, 11630, 13084, 14538, 15991, 17445],
+    [12195, 13938, 15680, 17422, 19164, 20906],
+    [14591, 16676, 18760, 20845, 22929, 25014]
+  ];
+  // base: row 7%(idx2) col 80%(idx1) = 11630
+  var baseR = 2, baseC = 1;
+  var min = 7050, max = 25014;
+  function lerp(a, b, t) { return Math.round(a + (b - a) * t); }
+  function cellBg(v) {
+    var t = (v - min) / (max - min);
+    var r = lerp(240, 197, t), g = lerp(245, 165, t), b = lerp(248, 114, t);
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+  function cellColor(v) {
+    var t = (v - min) / (max - min);
+    return t > 0.5 ? '#1A2744' : '#3D4A60';
+  }
+  var tbl = '<table style="min-width:500px;width:100%;border-collapse:collapse;font-size:12px">';
+  tbl += '<thead><tr><th style="padding:6px 8px;background:#1A2744;color:#C5A572;font-size:11px;text-align:left;white-space:nowrap">名目GDP↓ ' + colHeader + '</th>';
+  cols.forEach(function(c){ tbl += '<th style="padding:6px 8px;background:#1A2744;color:#C5A572;font-size:11px;text-align:center">' + c + '</th>'; });
+  tbl += '</tr></thead><tbody>';
+  rows.forEach(function(row, ri) {
+    tbl += '<tr><td style="padding:6px 8px;font-weight:600;color:#3D4A60;background:#FAFAF6;white-space:nowrap">' + row + '</td>';
+    data[ri].forEach(function(v, ci) {
+      var bg = cellBg(v); var fg = cellColor(v);
+      var isBase = (ri === baseR && ci === baseC);
+      var star = isBase ? ' ★' : '';
+      var border = isBase ? ';outline:2px solid #C5A572;outline-offset:-2px' : '';
+      tbl += '<td style="padding:6px 8px;text-align:center;background:' + bg + ';color:' + fg + ';font-weight:' + (isBase ? '700' : '500') + border + '">' + v.toLocaleString() + star + '</td>';
+    });
+    tbl += '</tr>';
+  });
+  tbl += '</tbody></table>';
+  wrap.innerHTML = tbl;
+})();
+
+// ══════════════════════════════════════
+// CHART 1 — GDP Trajectory (Section 02)
+// ══════════════════════════════════════
+(function(){
+  var ctx = document.getElementById('chart-gdp');
+  if (!ctx) return;
+  var labels = ['0年','5年','10年','15年','20年'];
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: '日本 実績',
+          data: [4776, 9669, 11809, 25801, 44198],
+          borderColor: '#C5A572',
+          backgroundColor: 'rgba(197,165,114,0.08)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#C5A572',
+          pointRadius: 4,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'ベトナム ベースケース',
+          data: [4745, 7643, 11760, 17279, 24236],
+          borderColor: '#1A2744',
+          backgroundColor: 'rgba(26,39,68,0.07)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#1A2744',
+          pointRadius: 4,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'ベトナム ベアケース',
+          data: [4745, 6200, 8500, 10800, 13000],
+          borderColor: '#8A94A6',
+          borderWidth: 1.5,
+          borderDash: [5,4],
+          pointBackgroundColor: '#8A94A6',
+          pointRadius: 3,
+          tension: 0.35,
+          fill: false
+        },
+        {
+          label: 'ベトナム ブルケース',
+          data: [4745, 9000, 14000, 22000, 32000],
+          borderColor: '#D4BA8E',
+          borderWidth: 1.5,
+          borderDash: [5,4],
+          pointBackgroundColor: '#D4BA8E',
+          pointRadius: 3,
+          tension: 0.35,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              return ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString();
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(138,148,166,0.12)' },
+          ticks: { font: { size: 12, family: "'Noto Sans JP', sans-serif" }, color: '#8A94A6' }
+        },
+        y: {
+          grid: { color: 'rgba(138,148,166,0.12)' },
+          ticks: {
+            callback: function(v) { return '$' + (v/1000).toFixed(0) + 'k'; },
+            font: { size: 11, family: "'Noto Sans JP', sans-serif" },
+            color: '#8A94A6'
+          }
+        }
+      }
+    }
+  });
+})();
+
+// ══════════════════════════════════════
+// CHART 2 — Waterfall (Section 08)
+// ══════════════════════════════════════
+(function(){
+  var ctx = document.getElementById('chart-waterfall');
+  if (!ctx) return;
+  var labels = ['全体時価総額', '国営・戦略株主\n控除後', 'FOL制約\n控除後', '浮動株調整\n控除後', '流動性フィルター\n控除後', '実効投資可能\n市場（推計）'];
+  var accessible = [352, 232, 167, 112, 77, 75];
+  var locked =     [0,   120,  65,  55,  35,  0];
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['全体', '国営株主\n控除後', 'FOL\n控除後', '浮動株\n控除後', '流動性\n控除後', '実効\n投資可能'],
+      datasets: [
+        {
+          label: 'アクセス可能',
+          data: accessible,
+          backgroundColor: function(ctx) {
+            return ctx.dataIndex === 5 ? '#C5A572' : 'rgba(197,165,114,0.55)';
+          },
+          borderColor: function(ctx) {
+            return ctx.dataIndex === 5 ? '#C5A572' : 'rgba(197,165,114,0.7)';
+          },
+          borderWidth: 1,
+          borderRadius: 2
+        },
+        {
+          label: '控除・制約分',
+          data: locked,
+          backgroundColor: 'rgba(61,74,96,0.35)',
+          borderColor: 'rgba(61,74,96,0.5)',
+          borderWidth: 1,
+          borderRadius: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              return ctx.dataset.label + ': $' + ctx.parsed.y + 'B';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          grid: { display: false },
+          ticks: { font: { size: 11, family: "'Noto Sans JP', sans-serif" }, color: '#8A94A6' }
+        },
+        y: {
+          stacked: true,
+          max: 400,
+          grid: { color: 'rgba(138,148,166,0.12)' },
+          ticks: {
+            callback: function(v) { return '$' + v + 'B'; },
+            font: { size: 11, family: "'Noto Sans JP', sans-serif" },
+            color: '#8A94A6'
+          }
+        }
+      }
+    }
+  });
+})();
+
+// ══════════════════════════════════════
+// CHART 3 — 2045 Scenarios (Section 14)
+// ══════════════════════════════════════
+(function(){
+  var ctx = document.getElementById('chart-scenario');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['ベアケース', 'ベースケース', 'ブルケース', 'ハイコンビクション'],
+      datasets: [
+        {
+          label: '2035年 GDP/人',
+          data: [8500, 11800, 14500, 16000],
+          backgroundColor: 'rgba(61,74,96,0.55)',
+          borderColor: 'rgba(61,74,96,0.7)',
+          borderWidth: 1,
+          borderRadius: 3
+        },
+        {
+          label: '2045年 GDP/人',
+          data: [13000, 24200, 32000, 38000],
+          backgroundColor: function(ctx) {
+            return ctx.dataIndex === 1 ? '#C5A572' : 'rgba(197,165,114,0.6)';
+          },
+          borderColor: function(ctx) {
+            return ctx.dataIndex === 1 ? '#C5A572' : 'rgba(197,165,114,0.75)';
+          },
+          borderWidth: 1,
+          borderRadius: 3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              return ctx.dataset.label + ': $' + ctx.parsed.y.toLocaleString();
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 12, family: "'Noto Sans JP', sans-serif" }, color: '#8A94A6' }
+        },
+        y: {
+          grid: { color: 'rgba(138,148,166,0.12)' },
+          ticks: {
+            callback: function(v) { return '$' + (v/1000).toFixed(0) + 'k'; },
+            font: { size: 11, family: "'Noto Sans JP', sans-serif" },
+            color: '#8A94A6'
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>
